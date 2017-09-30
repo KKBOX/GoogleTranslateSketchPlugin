@@ -1,0 +1,43 @@
+//
+// translate.cocoascript
+//
+// Copyright (c) 2017 KKBOX Taiwan Co., Ltd. All Rights Reserved.
+//
+
+var decodeHTMLEntities = function(html) {
+    html = html.replace(/&#39;/g, "'")
+    html = html.replace(/&quot;/g, '"')
+    return html
+}
+
+var translate = function(api_key, strings, from_language, to_language) {
+    // API Reference: https://cloud.google.com/translate/docs/reference/translate
+    var url_string = [@"https://translation.googleapis.com/language/translate/v2?key=" stringByAppendingString:api_key]
+    var url = [NSURL URLWithString:url_string]
+    var parameters = [NSMutableDictionary dictionary]
+    [parameters setObject:from_language forKey:@"source"]
+    [parameters setObject:to_language forKey:@"target"]
+    [parameters setObject:strings forKey:@"q"]
+
+    var parametersData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:nil]
+    var request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"]
+    [request setHTTPBody:parametersData]
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-type"]
+
+    try {
+        var oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil]
+        var json = [NSJSONSerialization JSONObjectWithData:oResponseData options: 0 error: nil]
+        var translations = json["data"]["translations"]
+        var translationMap = [NSMutableDictionary dictionary]
+        for (var i = 0; i < strings.length; i++) {
+            var key = strings[i]
+            var value = translations[i]["translatedText"]
+            value = decodeHTMLEntities(value)
+            translationMap[key] = value
+        }
+        return translationMap
+    } catch(e) {
+        return null
+    }
+}

@@ -1,0 +1,146 @@
+//
+// script.cocoascript
+//
+// Copyright (c) 2017 KKBOX Taiwan Co., Ltd. All Rights Reserved.
+//
+
+@import 'translate.cocoascript'
+
+var extractedStrings = null
+var translation = null
+
+var settings = function(context) {
+    var window = [[NSWindow alloc] init]
+    window.setTitle("Settings")
+    [window setFrame:NSMakeRect(0, 0, 580, 170) display:false]
+    var promptField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)]
+    [promptField setEditable:false]
+    [promptField setBordered:false]
+    [promptField setDrawsBackground:false]
+    [promptField setStringValue:"API Key:"]
+    [promptField sizeToFit]
+    [promptField setFrame:NSMakeRect(20, 95, [promptField frame].size.width, [promptField frame].size.height)]
+    [[window contentView] addSubview:promptField]
+
+    var helpField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)]
+    [helpField setEditable:false]
+    [helpField setBordered:false]
+    [helpField setDrawsBackground:false]
+    [helpField setStringValue:"You need an API key to access Google Translate."]
+    [helpField sizeToFit]
+    [helpField setFrame:NSMakeRect(20, 60, [helpField frame].size.width, [helpField frame].size.height)]
+    [[window contentView] addSubview:helpField]
+
+    var apiKeyTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 430, 24)]
+    [apiKeyTextField setFrame:NSMakeRect([promptField frame].size.width + 30, 90, [apiKeyTextField frame].size.width, [apiKeyTextField frame].size.height)]
+    var apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:"googleTranslateAPIKey"]
+    if (!apiKey) {
+        apiKey = ""
+        [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:"googleTranslateAPIKey"]
+    }
+    [apiKeyTextField setStringValue:apiKey]
+    [[window contentView] addSubview:apiKeyTextField]
+
+    var okButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)]
+    [okButton setTitle:"OK"]
+    [okButton setBezelStyle:NSRoundedBezelStyle]
+    [okButton sizeToFit]
+    [okButton setFrame:NSMakeRect([window frame].size.width - [okButton frame].size.width - 20, 14, [okButton frame].size.width, [okButton frame].size.height)]
+    [okButton setKeyEquivalent:"\r"] // return key
+    [okButton setCOSJSTargetFunction:function(sender) {
+        var apiKey = [apiKeyTextField stringValue]
+        [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:"googleTranslateAPIKey"]
+
+        [window orderOut:nil]
+        [NSApp stopModal]
+    }];
+    [[window contentView] addSubview:okButton]
+    [NSApp runModalForWindow:window]
+}
+
+var extractStringFromLayer = function(inLayer) {
+    if ([inLayer isKindOfClass:[MSTextLayer class]]) {
+        var title = [inLayer stringValue]
+        [extractedStrings addObject:title]
+        print(title)
+        return
+    }
+    if (!inLayer.layers) {
+        return
+    }
+    var sublayers = [inLayer layers];
+    if ([sublayers count] > 0) {
+        for (var i = 0; i< [sublayers count]; i++) {
+            var subLayer = sublayers[i]
+            extractStringFromLayer(subLayer)
+        }
+    }
+}
+
+var translateLayer = function(inLayer) {
+    if ([inLayer isKindOfClass:[MSTextLayer class]]) {
+        var title = [inLayer stringValue]
+        var newTitle = [translation objectForKey:title]
+        if (newTitle) {
+            [inLayer setStringValue:newTitle]
+        }
+        return
+    }
+    if (!inLayer.layers) {
+        return
+    }
+    var sublayers = [inLayer layers];
+    if ([sublayers count] > 0) {
+        for (var i = 0; i< [sublayers count]; i++) {
+            var subLayer = sublayers[i]
+            translateLayer(subLayer)
+        }
+    }
+}
+
+var doTranslate = function(context, from, to) {
+
+    var apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:"googleTranslateAPIKey"]
+    if ([apiKey length] == 0) {
+        settings(context)
+        return
+    }
+
+    extractedStrings = [NSMutableArray array]
+
+    var document = context.document
+    var selectedLayers = [[document selectedLayers] layers]
+    var count = [selectedLayers count]
+    for (var i = 0; i < count; i++) {
+        var selectedLayer = selectedLayers[i]
+        extractStringFromLayer(selectedLayer)
+    }
+
+    if (![extractedStrings count]) {
+        return
+    }
+
+    var translated = translate(apiKey, extractedStrings, from, to)
+
+    if (!translated) {
+        return
+    }
+    translation = translated
+
+    for (var i = 0; i < count; i++) {
+        var selectedLayer = selectedLayers[i]
+        translateLayer(selectedLayer)
+    }
+};
+
+var zhToEn = function(context) {
+    doTranslate(context, "zh", "en")
+}
+
+var zhToJP = function(context) {
+    doTranslate(context, "zh", "ja")
+}
+
+var zhToMS = function(context) {
+    doTranslate(context, "zh", "ms")
+}

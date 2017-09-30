@@ -1,0 +1,52 @@
+{
+  "author" : "",
+  "commands" : [
+    {
+      "script" : "script.cocoascript",
+      "name" : "設定",
+      "handlers" : {
+        "run" : "settings"
+      },
+      "identifier" : "com.bohemiancoding.sketch.settings"
+    },
+    {
+      "script" : "script.cocoascript",
+      "name" : "中翻英",
+      "handlers" : {
+        "run" : "zhToEn"
+      },
+      "identifier" : "com.bohemiancoding.sketch.zhToEn"
+    },
+    {
+      "script" : "script.cocoascript",
+      "name" : "中翻日",
+      "handlers" : {
+        "run" : "zhToJP"
+      },
+      "identifier" : "com.bohemiancoding.sketch.zhToJP"
+    },
+    {
+      "script" : "script.cocoascript",
+      "name" : "中翻馬來文",
+      "handlers" : {
+        "run" : "zhToMS"
+      },
+      "identifier" : "com.bohemiancoding.sketch.zhToMS"
+    },
+
+  ],
+  "menu" : {
+    "title" : "Google Translate",
+    "items" : [
+      "com.bohemiancoding.sketch.settings",
+      "com.bohemiancoding.sketch.zhToEn",
+        "com.bohemiancoding.sketch.zhToJP",
+        "com.bohemiancoding.sketch.zhToMS"
+    ]
+  },
+  "identifier" : "com.example.sketch.99e32885-3449-40aa-adcf-fea63cd8034c",
+  "version" : "1.0",
+  "description" : "Google 翻譯套件",
+  "authorEmail" : "wzyang@kkbox.com",
+  "name" : "Google Translate"
+}

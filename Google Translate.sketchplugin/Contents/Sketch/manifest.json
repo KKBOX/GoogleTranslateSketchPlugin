@@ -45,7 +45,9 @@
     ]
   },
   "identifier" : "com.example.sketch.99e32885-3449-40aa-adcf-fea63cd8034c",
-  "version" : "1.0",
+  "appcast": "https://raw.githubusercontent.com/KKBOX/GoogleTranslateSketchPlugin/master/appcast.xml",
+  "homepage" : "https://github.com/KKBOX/GoogleTranslateSketchPlugin",
+  "version" : "1.0.1",
   "description" : "Google 翻譯套件",
   "authorEmail" : "wzyang@kkbox.com",
   "name" : "Google Translate"

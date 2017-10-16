@@ -38,7 +38,7 @@ KKBOX 使用這套工具改善設計工作的效率。
 
 ## 安裝
 
-- 請先下載[安裝包](https://github.com/zonble/GoogleTranslateSketchPlugin/archive/master.zip)。
+- 請先下載[安裝包](https://github.com/KKBOX/GoogleTranslateSketchPlugin/archive/master.zip)。
 - 下載之後點兩下解壓縮。
 - 在 Google Translate.sketchplugin 檔案上點兩下安裝。
 

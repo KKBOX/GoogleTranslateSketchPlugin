@@ -36,7 +36,7 @@ and 45.
 
 ## Installation
 
-- Download the [plugin package](https://github.com/zonble/GoogleTranslateSketchPlugin/archive/master.zip)。
+- Download the [plugin package](https://github.com/KKBOX/GoogleTranslateSketchPlugin/archive/master.zip)。
 - Unzip the downloaded file.
 - Double click on `Google Translate.sketchplugin`.
 

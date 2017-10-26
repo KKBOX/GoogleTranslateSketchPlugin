@@ -3,18 +3,18 @@
   <channel>
     <title>Google Translate Plug-in</title>
     <link>https://github.com/KKBOX/GoogleTranslateSketchPlugin</link>
-    <description>Plugin to translate text layers using Google Translate</description>
+    <description>Plug-in to translate text layers using Google Translate</description>
     <language>en</language>
       <item>
-        <title>Version 1.0.1</title>
+        <title>Version 1.0.2</title>
         <description>
           <![CDATA[
             <ul>
-              <li>Plugin to translate text layers using Google Translate</li>
+              <li>Plug-in to translate text layers using Google Translate</li>
             </ul>
           ]]>
         </description>
-        <enclosure url="https://github.com/KKBOX/GoogleTranslateSketchPlugin/releases/tag/1.0.1" sparkle:version="1.0.1" />
+        <enclosure url="https://github.com/KKBOX/GoogleTranslateSketchPlugin/archive/1.0.2.zip" sparkle:version="1.0.2" />
       </item>
   </channel>
 </rss>
